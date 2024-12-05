@@ -1,0 +1,301 @@
+<script>
+const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+if (userData) {
+    // Jika ada data pengguna, tampilkan informasi pengguna
+    console.log('User:', userData);
+} 
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Moonstone Hotel Helps you Discover The Perfect Balance
+	Of Hospitality, Luxury And Comfort.">
+
+	<title>Moonstone Hotel</title>
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/global-header.css">
+	<link rel="stylesheet" href="/css/global-footer.css">
+	<link rel="stylesheet" href="/css/accesibility.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="shortcut icon" href="/img/moonstoneicon.png" type="image/x-icon">
+</head>
+<body class="scroll-bar">
+	<div id="loader">
+		<svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+		viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+			<path fill="#d4af37" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+				<animateTransform 
+					attributeName="transform" 
+					attributeType="XML" 
+					type="rotate"
+					dur="1s" 
+					from="0 50 50"
+					to="360 50 50" 
+					repeatCount="indefinite" />
+		</path>
+		</svg>
+	</div>
+   <header>
+      <div class="header-container">
+         <nav class="header-nav-bar">
+				<div class="header-nav-logo">
+					<a href="/">
+						<img src="/img/moonstone.png"
+							alt="moonstone hotels logo" width="150px" style="margin-top: 10px">
+					</a>
+				</div>
+				<ul class="header-nav-lists">
+						<li class="header-nav-list">
+							<a class="header-nav-link header-active" href="/">Home</a>
+						</li>
+						<li class="header-nav-list"><a class="header-nav-link"
+								href="/room-page">Rooms and Suites</a></li>
+						<li class="header-nav-list"><a class="header-nav-link" href="/facilities">Facilities</a></li>
+						<li class="header-nav-list"><a class="header-nav-link" href="/contact-page">Contact Us</a></li>
+						<li class="header-nav-list">
+							<a class="header-btn header-btn-custom" href="javascript:void(0)" onclick="checkLogin()">BOOK NOW</a>
+						</li>
+					</ul>
+            
+            <div class="header-hamburger-icon">
+               <div class="header-hamburger-line-1"></div>
+               <div class="header-hamburger-line-2"></div>
+               <div class="header-hamburger-line-3"></div>
+            </div>
+         </nav>
+      </div>
+	</header>
+
+	<div class="jumbotron-container">
+		<div class="jumbotron-left">
+			<h2 class="jumbotron-header">Discover the perfect balance <br> of hospitality, luxury and <br>comfort.</h2>
+			<p>We are focused on providing clients with the highest level<br>
+					of comfort and excellent affordable rates</p>
+					<a class="btn btn-fill btn-large" style="text-align: center;" href="javascript:void(0)" onclick="checkLogin()">Book Now</a>
+		</div>
+	</div>
+
+	<!-- Enjoy your stay in our hotel -->
+	<div class="enjoy-container">
+		<div class="enjoy-header">
+			<h2 class="enjoy-heading">Enjoy your stay <br>at our hotel</h2>
+			<hr class="horizontal">
+			<p>We are more than being a hotel because we are able<br> to combine the quality standard of a hotel with the<br> advantages of an apartment.</p>
+		</div>
+	<div class="enjoy-services">
+		<div class="first-col">
+			<div class="upper">
+					<span>
+						<img src="/img/clock.svg" alt="clock icon" class="enjoy__clock-icon">
+					</span>
+					<h3>24 hours Room Service</h3>
+					<p>You have access to 24-hours a day room service at our hotel.</p>
+			</div>
+			<div class="lower">
+				<span>
+					<img src="/img/database.svg" alt="fitness icon" class="enjoy__fitness-icon">
+				</span>
+				<h3>Fitness and Spa</h3>
+				<p>Access to fitness and Spa is part of our hotel package when you make a booking.</p>
+			</div>
+			
+		</div>
+		<div class="sec-col">
+				<div class="upper">
+					<span>
+						<img src="/img/coffee.svg" alt="coffee icon" class="enjoy__coffee-icon">
+					</span>
+						<h3>Restaurant and Bars</h3>
+					<p>You have access to the world state of art restaurants and bars at our hotel</p>
+				</div>
+				<div class="lower">
+					<span>
+						<img src="/img/wifi.svg" alt="wifi icon" class="enjoy__wifi-icon">
+					</span>
+						<h3>Free Wi-Fi Access</h3>
+						<p>You have access to 24-hours free Wi-Fi services irrespective of any room.</p>
+				</div>
+		</div>
+		<div class="third-col cont">
+			<img src="/img/ant-design_play-circle-filled.svg" alt="video play icon" class="enjoy__play-icon">
+			<img src="/img/video link.webp" alt="women in swimming pool" class="third-col-video">
+		</div>
+	</div>
+
+	</div>
+	<section class="special-offers">
+		<!-- Top Text -->
+		<div class="page-header-container">
+
+		  <h2 class="page-header" style="text-align: center;">Simplicity is the ultimate <br>Watchword</h2>
+            </div>
+			<div class="row center-lg">
+				<div class="col image-col right-marg">
+					<img src="/img/hotel-1.webp" alt="room-image" class="small-image">
+					<img src="/img/hotel-2.webp" alt="room-image" class="small-image">
+					<img src="/img/hotel-3.webp" alt="room-image" class="small-image img-hide">
+					<div class="side-by-side-container">
+						<div class="large-image-container">
+							<img src="/img/hotel-4-large.webp" alt="room-image-large" class="large-image">
+						</div>
+						<section class="stacked-image-container">
+						  <div><img src="/img/hotel-5.webp" alt="room-image" class="small-image"></div>
+						  <div><img src="/img/hotel-6.webp" alt="room-image" class="small-image"></div>
+						</section>
+					</div>
+				</div>
+				<div class="col">
+					<p class="offers-sub-title">
+							The fact that we are run by hospitality professionals<br>and equipped with the world best interior designers <br> is why our rooms and suites are second to none in <br>the universe
+					</p>
+					<ul class="offers-list">
+						<li>
+							<div>
+								<img src="/img/check-square.svg" alt="tick" class="list-icon">
+								<p class="list-text">Standard Room</p>
+							</div>
+						</li>
+						<li>
+							<div>
+								<img src="/img/check-square.svg" alt="tick" class="list-icon">
+								<p class="list-text">Executive Room</p>
+							</div>
+						</li>
+						<li>
+							<div>
+								<img src="/img/check-square.svg" alt="tick" class="list-icon">
+								<p class="list-text">King Suite</p>
+							</div>
+						</li>
+					</ul>
+					<a class="btn btn-fill btn-large centered" href="javascript:void(0)" onclick="checkLogin()">Book Now</a>
+				</div>
+			</div>
+		</section>
+
+	<!-- Client Reviews -->
+	<div class="review-container">
+		<div class="review-header">
+			<h2 class="review-title">
+				Client Reviews
+			</h2>
+			<hr class="horizontal">
+			<p>We take great pride in the services we provide to our customers.<br>
+				Check out the heartfelt stories from our happy customers!</p>
+		</div>
+		<div class="cards-container">
+				<div class="card">
+					<img src="/img/customer-1.webp" alt="" class="card-avi">
+					<h2 class="card-title">
+							Angel Fransisca Wijaya
+					</h2>
+					<h3 class="card-subtitle">
+						China, Shanghai.
+					</h3>
+					<p class="card-desc">我很喜欢这家酒店! The rooms are super clean, the staff is incredibly friendly, and the breakfast options are great. Highly recommended!</p>
+				</div>
+				<div class="card">
+					<img src="/img/customer-2.jpeg" alt="" class="card-avi">
+					<h2 class="card-title">
+							Vheren Thendry
+					</h2>
+					<h3 class="card-subtitle">
+							Japan, Shibuya.
+					</h3>
+					<p class="card-desc">素晴らしいホテル! Moonstone hotel makes you feel the best room quality that makes you feel the comfort of a home.</p>
+				</div>
+				<div class="card">
+					<img 
+						src="/img/customer-3.jpeg" 
+						alt="" 
+						class="card-avi">
+					<h2 class="card-title">
+						Fionna Ameilia
+					</h2>
+					<h3 class="card-subtitle">
+						Europe, Swiss.
+					</h3>
+					<p class="card-desc">My Family and I are very happy when we lodge into moonstone hotel. They are by far the best in the universe.</p>
+				</div>
+			</div>
+	</div>
+	<footer class="footer">
+		<div class="footer-container">
+			<nav class="footer-nav">
+				<div class="footer-description">
+					<h3 class="footer-description-title">Moonstone Hotel</h3>
+					<p>Relax, recharge, and make special memories at our cozy hotel!</p>
+				</div>
+				<div class="footer-contact-us">
+					<h3 class="footer-description-title">Contact Us</h3>
+					<p class="footer-description-detail">
+						<img src="/img/map-pin.svg" class="footer-description-icon" alt="moonstone hotel location">
+
+						<span>Kota Tangerang, Banten</span></p>
+					<p class="footer-description-detail">
+						<img src="/img/phone.svg" class="footer-description-icon" alt="moonstone hotels phone number">
+						<span>
+					 0895-4123-4567</span></p>
+					<p class="footer-description-detail">
+						<img src="/img/mail.svg" class="footer-description-icon" alt="moonstone hotels email">
+						<span>kelompok2@moonstone.com</span> </p>
+				</div>
+				<div class="footer-follow-us">
+					<h3 class="footer-description-title">Follow Us</h3>
+					<ul class="footer-follow-us-lists">
+						<li class="follow-us-list">
+							<a href="">
+								<img src="/img/facebook.svg" alt="moonstone hotels facebook page">
+							</a>
+						</li>
+						<li class="follow-us-list">
+							<a href="">
+								<img src="/img/twitter.svg" alt="moonstone hotel twitter page">
+							</a>
+						</li>
+						<li class="follow-us-list">
+							<a href="">
+								<img src="/img/instagram.svg" alt="moonstone hotels instagram page">
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</footer>
+	<script defer async>
+		(() => {
+			const loader = document.getElementById('loader');
+			const scrollBar = document.getElementsByClassName('scroll-bar')[0];
+			window.addEventListener('load', () => {
+				loader.classList.add('none');
+				scrollBar.classList.remove('scroll-bar')
+			});
+		})();
+	</script>
+	<script  defer async src="/js/toggleHamburger.js"></script>
+	<script>
+		function checkLogin(id) {
+			// Mengirim request untuk memeriksa apakah pengguna sudah login
+			const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+			if (userData) {
+				// Jika ada data pengguna, tampilkan informasi pengguna
+				console.log('User:', userData);
+				if (userData.role === 'ADMIN') {
+					// Jika role admin, tampilkan halaman admin
+					window.location.href = '/admin/index';
+				} else {
+					// Jika role customer, tampilkan halaman utama
+					window.location.href = '/room-page';
+				}
+			}else{
+				window.location.href = '/login-page';
+			}
+		}
+	</script>
+</body>
+</html>

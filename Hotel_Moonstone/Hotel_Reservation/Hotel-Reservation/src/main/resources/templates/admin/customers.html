@@ -1,0 +1,90 @@
+<script>
+    // Mengecek data pengguna di sessionStorage
+const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+if (userData) {
+    // Jika ada data pengguna, tampilkan informasi pengguna
+    console.log('User:', userData);
+    if (userData.role === 'ADMIN') {
+        // Jika role adalah ADMIN, arahkan ke /admin/index
+    } else if (userData.role === 'CUSTOMER') {
+        // Jika role adalah CUSTOMER, arahkan ke halaman utama /
+        window.location.href = '/';
+    }
+} else {
+    // Jika tidak ada data pengguna, arahkan ke halaman login
+    window.location.href = '/login-page';
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Customers</title>
+    <link rel="shortcut icon" href="/img/moonstoneicon.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="'#'">Hotel Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin'">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/kamar'">Kelola Kamar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/pemesanan'">Pemesanan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/customers'">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id='logoutBtn' style="background: none; border: none;">Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="mb-4">Daftar Customer</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Email</th>
+                    <th>NIK</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="customer : ${customers}">
+                    <tr>
+                        <td th:text="${customer.fname} + ' ' + ${customer.lname}"></td>
+                        <td th:text="${customer.email}"></td>
+                        <td th:text="${customer.nik}"></td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Menangani klik tombol logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Menghapus data pengguna dari sessionStorage
+            sessionStorage.removeItem('userData');
+            
+            // Redirect ke halaman login setelah data dihapus
+            window.location.href = '/login-page';  // Pastikan URL login sesuai
+        });
+    </script>
+</body>
+</html>

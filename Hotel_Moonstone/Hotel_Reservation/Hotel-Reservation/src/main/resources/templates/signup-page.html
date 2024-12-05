@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Moonstone Hotels - Sign Up</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="shortcut icon" href="/img/moonstoneicon.png" type="image/x-icon">
+</head>
+<body>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="wrap d-md-flex">
+                    <div class="img" style="background-image: url(/img/Homepage-jumbotron.webp);"></div>
+                    <div class="login-wrap p-4 p-md-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4">Sign Up</h3>
+                            </div>
+                        </div>
+                        <form id="signupForm" class="signup-form">
+                            <div class="form-group mb-3">
+                                <label class="label" for="nik">NIK</label>
+                                <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukan NIK" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="label" for="fname">First Name</label>
+                                <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="label" for="lname">Last Name</label>
+                                <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="label" for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email (Using @moonstone.com)" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="label" for="password">Password</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign Up</button>
+                            </div>
+                        </form>
+
+                        <!-- Menampilkan pesan error jika ada -->
+                        <div id="error-message" style="color:red; display:none;"></div>
+
+                        <p class="text-center">Already a Member? <a href="/login-page">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Tambahkan axios -->
+
+<script type="module">
+    import { API_BASE_URL } from '/js/config.js';
+    console.log(API_BASE_URL );
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Menghindari reload halaman saat submit
+
+        console.log({
+            nik: document.getElementById('nik').value,
+            fname: document.getElementById('fname').value,
+            lname: document.getElementById('lname').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        });
+
+        const data = JSON.stringify({
+            nik: document.getElementById('nik').value,
+            fname: document.getElementById('fname').value,
+            lname: document.getElementById('lname').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        });
+
+        let config = {
+            method: 'post',
+            url: `${API_BASE_URL}/api/auth/signup`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log(JSON.stringify(response.data));
+
+                window.location.href = '/login-page';
+            })
+            .catch((error) => {
+                console.log(error);
+                  // Menampilkan pesan error jika ada
+                  if (error.response && error.response.data.error) {
+                    document.getElementById('error-message').style.display = 'block';
+                    document.getElementById('error-message').textContent = error.response.data.error;
+                } else {
+                    // Menangani error lain jika tidak ada response dari server
+                    document.getElementById('error-message').style.display = 'block';
+                    document.getElementById('error-message').textContent = 'Terjadi kesalahan, coba lagi.';
+                }
+            });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<script>
+    // Mengecek data pengguna di sessionStorage
+const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+if (userData) {
+    // Jika ada data pengguna, tampilkan informasi pengguna
+    console.log('User:', userData);
+    if (userData.role === 'ADMIN') {
+        // Jika role adalah ADMIN, arahkan ke /admin/index
+    } else if (userData.role === 'CUSTOMER') {
+        // Jika role adalah CUSTOMER, arahkan ke halaman utama /
+        window.location.href = '/';
+    }
+} else {
+    // Jika tidak ada data pengguna, arahkan ke halaman login
+    window.location.href = '/login-page';
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Room</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/img/moonstoneicon.png" type="image/x-icon">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Hotel Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin'">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/kamar'">Kelola Kamar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/pemesanan'">Pemesanan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/customers'">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id='logoutBtn'>Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="mb-4">Tambah Kamar</h1>
+        <form id="roomForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="room_number" class="form-label">Room Number</label>
+                <input type="text" id="room_number" name="roomNumber" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="room_name" class="form-label">Room Name</label>
+                <input type="text" id="room_name" name="namaKamar" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="room_type" class="form-label">Room Type</label>
+                <select id="room_type" name="roomType" class="form-select" required>
+                    <option value="SINGLE">Single</option>
+                    <option value="DOUBLE">Double</option>
+                    <option value="SUITE">Suite</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" id="price" name="price" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="imgFile" class="form-label">Room Image</label>
+                <input type="file" id="imgFile" name="imgFile" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="jumlah_kasur" class="form-label">Jumlah Kasur</label>
+                <input type="number" id="jumlah_kasur" name="jumlahKasur" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="jumlah_orang" class="form-label">Jumlah Orang</label>
+                <input type="number" id="jumlah_orang" name="jumlahOrang" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="deskripsi_kamar" class="form-label">Deskripsi Kamar</label>
+                <textarea id="deskripsi_kamar" name="deskripsiKamar" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Room</button>
+            <a href="/admin/rooms" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module">
+        import { API_BASE_URL } from './../js/config.js';
+        console.log(API_BASE_URL );
+        document.getElementById('roomForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Menghindari submit biasa
+    
+            // Mengambil data dari form
+            const formData = new FormData();
+            formData.append('namaKamar', document.getElementById('room_name').value);
+            formData.append('roomNumber', document.getElementById('room_number').value);
+            formData.append('roomType', document.getElementById('room_type').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('imgFile', document.getElementById('imgFile').files[0]);
+            formData.append('jumlahKasur', document.getElementById('jumlah_kasur').value);
+            formData.append('jumlahOrang', document.getElementById('jumlah_orang').value);
+            formData.append('deskripsiKamar', document.getElementById('deskripsi_kamar').value);
+            console.log(...formData);
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: `${API_BASE_URL}/api/kamar/add`,
+                data: formData // FormData akan mengatur Content-Type secara otomatis
+            };
+
+                axios.request(config)
+                .then((response) => {
+                console.log(JSON.stringify(response.data));
+                alert('Kamar berhasil ditambahkan!');
+                // Redirect atau lakukan aksi lain setelah berhasil
+                window.location.href = '/admin/kamar'; // Redirect ke halaman daftar kamar
+                })
+                .catch((error) => {
+                console.log(error);
+                console.error('Terjadi kesalahan:', error);
+                alert('Terjadi kesalahan saat menambahkan kamar.');
+                });
+        });
+    </script>
+    <script>
+        // Menangani klik tombol logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Menghapus data pengguna dari sessionStorage
+            sessionStorage.removeItem('userData');
+            
+            // Redirect ke halaman login setelah data dihapus
+            window.location.href = '/login-page';  // Pastikan URL login sesuai
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

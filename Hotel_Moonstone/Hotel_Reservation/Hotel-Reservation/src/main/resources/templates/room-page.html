@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Moonstone Hotel - Rooms and Suites</title>
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/global-header.css">
+	<link rel="stylesheet" href="/css/global-footer.css">
+	<link rel="stylesheet" href="/css/room-page.css">
+    <link rel="shortcut icon" href="/img/moonstoneicon.png" type="image/x-icon">
+    <style>
+        .room-section-header-container {
+            display: flex;
+            justify-content: center;  
+            align-items: center;   
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .rooms-img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <nav class="header-nav-bar">
+				<div class="header-nav-logo">
+					<a th:href="@{/}">
+						<img src="/img/moonstone.png"
+							alt="moonstone hotels logo" width="150px" style="margin-top: 10px">
+					</a>
+				</div>
+				<ul class="header-nav-lists">
+						<li class="header-nav-list">
+							<a class="header-nav-link " th:href="@{/}">Home</a>
+						</li>
+						<li class="header-nav-list"><a class="header-nav-link header-active"
+                            th:href="@{/room-page}">Rooms and Suites</a></li>
+						<li class="header-nav-list"><a class="header-nav-link" th:href="@{/facilities}">Facilities</a></li>
+						<li class="header-nav-list"><a class="header-nav-link" th:href="@{/contact-page}">Contact Us</a></li>
+						<li class="header-nav-list">
+							<a class="header-btn header-btn-custom" th:href="'javascript:void(0)'" onclick="checkLogin()">BOOK NOW</a>
+						</li>
+					</ul>
+            
+            <div class="header-hamburger-icon">
+               <div class="header-hamburger-line-1"></div>
+               <div class="header-hamburger-line-2"></div>
+               <div class="header-hamburger-line-3"></div>
+            </div>
+         </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+
+            <!-- Top Text -->
+            <div class="page-header-container">
+                <h2 class="page-header">Moonstone Hotel Rooms</h2>
+                <hr />
+                <p class="page-sub-header">
+                    Make your stay unforgettable with modern comfort and <br>
+                    incredible panoramic views.
+                </p>
+            </div>
+
+            <!-- Rooms -->
+            <section class="rooms-section">
+                <div class="row room-section-header-container">
+                    <div>
+                        <h4 class="room-section-header active-header" id="special-room">Special Room</h4>
+                    </div>
+                </div>                                            
+                <div class="row center-lg">
+                    <div class="rooms col col-2" th:each="room : ${availableRooms}">
+                        <img th:src="@{${room.fotoKamar}}" alt="foto kamar" class="rooms-img">
+                        <h3 class="room-title" th:text="${room.namaKamar}">Cozy Single Room</h3>
+                        <p class="room-text" th:text="${room.deskripsi}">Perfect for individuals seeking comfort and simplicity</p>
+                        <div>
+                            <div class="details-container">
+                                <img src="/img/check-square.svg" alt="tick" class="list-icon">
+                                <p class="list-text" th:text="${room.jumlahOrang + ' Persons'}">1 Person</p>
+                            </div>
+                            <div class="details-container">
+                                <img src="/img/bed.png" alt="tick" class="list-icon">
+                                <p class="list-text" th:text="${room.jumlahOrang} +' ' + ${room.tipeKamar}">1 Kingsize bed</p>
+                            </div>
+                        </div>
+                        <p class="amount-text" th:text="'Rp ' + ${room.harga} + ' Per Night'">Rp550.000 Per Night</p>
+                        <div class="buttons-container">
+                            <a class="btn btn-fill" 
+                               href="javascript:void(0);" 
+                               th:attr="data-room-id=${room.id}" 
+                               onclick="redirectToBooking(this)">Book Now</a>
+                        </div>                        
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+		<div class="footer-container">
+			<nav class="footer-nav">
+				<div class="footer-description">
+					<h3 class="footer-description-title">Moonstone Hotel</h3>
+					<p>Relax, recharge, and make special memories at our cozy hotel!</p>
+				</div>
+				<div class="footer-contact-us">
+					<h3 class="footer-description-title">Contact Us</h3>
+					<p class="footer-description-detail"> 
+						<img src="/img/map-pin.svg" class="footer-description-icon" alt="star hotel location">
+
+						<span>Kota Tangerang, Banten</span></p>
+					<p class="footer-description-detail">
+						<img src="/img/phone.svg" class="footer-description-icon" alt="moonstone hotel phone number">
+						<span>
+                        0895-4123-4567</span></p>
+					<p class="footer-description-detail">
+						<img src="/img/mail.svg" class="footer-description-icon" alt="moonstone hotel email">
+						<span>kelompok2@moonstone.com</span> </p>
+				</div>
+				<div class="footer-follow-us">
+					<h3 class="footer-description-title">Follow Us</h3>
+					<ul class="footer-follow-us-lists">
+						<li class="follow-us-list">
+							<a th:href="'#'">
+								<img src="/img/facebook.svg" alt="moonstone hotel facebook page">
+							</a>
+						</li>
+						<li class="follow-us-list">
+							<a th:href="'#'">
+								<img src="/img/twitter.svg" alt="moonstone hotel twitter page">
+							</a>
+						</li>
+						<li class="follow-us-list">
+							<a th:href="'#'">
+								<img src="/img/instagram.svg" alt="moonstone hotel instagram page">
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</footer>
+    <script src="/js/switchRooms.js"></script>
+    <script src="/js/toggleHamburger.js"></script>
+    <script src="/js/jquery.min.js"></script>
+
+    <script>
+		function checkLogin() {
+			// Mengirim request untuk memeriksa apakah pengguna sudah login
+            const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+            if (userData) {
+                // Jika ada data pengguna, tampilkan informasi pengguna
+                console.log('User:', userData);
+                if (userData.role === 'ADMIN') {
+                    // Jika role admin, tampilkan halaman admin
+                    window.location.href = '/admin/index';
+                } else {
+                    // Jika role customer, tampilkan halaman utama
+                    window.location.href = '/room-page';
+                }
+            }else{
+                window.location.href = '/login-page';
+            }
+		}
+	</script>
+    <script>
+        function redirectToBooking(element) {
+            const userData = sessionStorage.getItem('userData');
+            
+            if (!userData) {
+                // Jika userData kosong, arahkan ke halaman login
+                window.location.href = '/login-page';
+            } else {
+                // Jika userData ada, arahkan ke halaman pesanan dengan room ID
+                const roomId = element.getAttribute('data-room-id');
+                window.location.href = `/client/pesanan/${roomId}`;
+            }
+        }
+    </script>
+</body>
+
+</html>

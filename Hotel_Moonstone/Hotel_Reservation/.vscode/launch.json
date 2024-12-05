@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ResTfulHrApplication<RESTful_HR>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.RESTful_hotel_reservation.RESTful_HR.ResTfulHrApplication",
+            "projectName": "RESTful_HR",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-HotelReservationApplication<Hotel-Reservation>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.new_hotel_reservation.Hotel.Reservation.HotelReservationApplication",
+            "projectName": "Hotel-Reservation",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

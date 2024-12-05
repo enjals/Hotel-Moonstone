@@ -1,0 +1,263 @@
+<script>
+    // Mengecek data pengguna di sessionStorage
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+
+    if (userData) {
+        // Jika ada data pengguna, tampilkan informasi pengguna
+        console.log("User:", userData);
+    
+        if (userData.role === "ADMIN") {
+            // Jika role adalah ADMIN, arahkan ke halaman admin
+            window.location.href = "/admin/index";
+        } else if (userData.role === "CUSTOMER") {
+            // Jika role adalah CUSTOMER, lanjutkan ke halaman booking
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById("fname").value = userData.fname; // Isi First Name
+                document.getElementById("lname").value = userData.lname ; // Isi Last Name
+                document.getElementById("userId").value = userData.id; // Isi ID User (Hidden)
+            });
+
+        }
+    } else {
+        // Jika tidak ada data pengguna, arahkan ke halaman login
+        window.location.href = "/login-page";
+    }
+    
+    // Ambil ID kamar dari URL
+    const urlParts = window.location.pathname.split("/");
+    const roomId = urlParts[urlParts.length - 1]; // Mengambil elemen terakhir dari URL
+    document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("id_room").value = roomId; // Isi ID kamar
+    });
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global-header.css" />
+    <link rel="stylesheet" href="/css/global-footer.css" />
+    <link rel="stylesheet" href="/css/accesibility.css">
+    <link rel="stylesheet" href="/css/contact-page.css" />
+    <link rel="shortcut icon" href="/img/moonstone.png" type="image/x-icon">
+    <style>
+        /* Menyentuhkan form ke tengah */
+        .first-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Membuat tinggi kontainer 100% dari tinggi tampilan */
+        }
+
+        #booking-form {
+            width: 100%;
+            max-width: 600px; /* Maksimal lebar form */
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Penataan form input dan label */
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .page-header-container {
+            display: flex;
+            flex-direction: column;  
+            align-items: center;    
+            text-align: center;     
+            margin-top: 40px; 
+        }
+
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-container">
+        <nav class="header-nav-bar">
+            <div class="header-nav-logo">
+                <a th:href="'/'">
+                    <img src="/img/moonstone.png" alt="moonstone hotel logo" width="150px" style="margin-top: 10px">
+                </a>
+            </div>
+            <ul class="header-nav-lists">
+                <li class="header-nav-list">
+                    <a class="header-nav-link " th:href="'/'">Home</a>
+                </li>
+                <li class="header-nav-list"><a class="header-nav-link"
+                        th:href="'/room-page'">Rooms and Suites</a></li>
+                <li class="header-nav-list"><a class="header-nav-link" th:href="'/facilities'">Facilities</a></li>
+                <li class="header-nav-list"><a class="header-nav-link" th:href="'/contact-page'">Contact Us</a></li>
+                <li class="header-nav-list">
+                    <a class="header-btn header-btn-custom" th:href="'javascript:void(0)'" onclick="checkLogin()">BOOK NOW</a>
+                </li>
+            </ul>
+            <div class="header-hamburger-icon">
+                <div class="header-hamburger-line-1"></div>
+                <div class="header-hamburger-line-2"></div>
+                <div class="header-hamburger-line-3"></div>
+            </div>
+        </nav>
+    </div>
+</header>
+<!-- Top Text -->
+<div class="page-header-container" style="margin-top: 40px; margin-bottom: 100px;">
+    <h2 class="page-header">Moonstone Hotel Booking</h2>
+    <hr />
+    <p class="page-sub-header">
+        Make your stay unforgettable with modern comfort and <br>
+        incredible panoramic views.
+    </p>
+</div>
+
+<br>
+
+<div class="first-box" style="margin-top: 40px; margin-bottom: 40px;">
+    <div id="booking-form">
+        <h2 class="header" style="margin-bottom: 10px;">Hotel Booking Form</h2>
+        <form action="" id="formSubmit" class="form-group">
+            <input type="hidden" id="userId" name="userId" />
+        
+            <label for="fname" class="form-label">First Name</label>
+            <input type="text" id="fname" name="firstname" required readonly/>
+        
+            <label for="lname" class="form-label">Last Name</label>
+            <input type="text" id="lname" name="lastname" required readonly />
+        
+            <input type="text" id="id_room" name="id_room" hidden />
+            <input type="text" id="harga_permalam" name="harga" th:value="${kamar.harga}" hidden />
+        
+            <label for="room_name" class="form-label">Room Name</label>
+            <input type="text" id="room_name" name="room_name" th:value="${kamar.namaKamar}" required readonly />
+        
+            <label for="checkIn" class="form-label">Check-in Date</label>
+            <input type="date" id="checkIn" name="checkIn" required onchange="calculatePrice()" />
+        
+            <label for="checkOut" class="form-label">Check-out Date</label>
+            <input type="date" id="checkOut" name="checkOut" required onchange="calculatePrice()" />
+        
+            <label for="guests" class="form-label">Number of Guests</label>
+            <input type="number" id="guests" name="guests" min="1" th:max="${kamar.jumlahOrang}" required />
+        
+            <p id="priceDisplay" style="font-weight: bold; margin: 10px 0;">Total Price: Rp 0</p>
+            <input type="hidden" id="totalPrice" name="totalPrice" />
+        
+            <button type="submit" class="btn mt-4" style="background-color: #D4AF37; color: white;">Book Now</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Fungsi calculatePrice dipindahkan ke luar event listener
+    function calculatePrice() {
+        const checkInValue = document.getElementById('checkIn').value;
+        const checkOutValue = document.getElementById('checkOut').value;
+
+        // Pastikan tanggal check-in dan check-out terisi
+        if (!checkInValue || !checkOutValue) {
+            document.getElementById('priceDisplay').textContent = "Please select both dates";
+            return;
+        }
+
+        const checkIn = new Date(checkInValue);
+        const checkOut = new Date(checkOutValue);
+
+        // Pastikan tanggal check-in dan check-out valid
+        if (checkIn == "Invalid Date" || checkOut == "Invalid Date") {
+            document.getElementById('priceDisplay').textContent = "Invalid Dates";
+            return; // Jika tanggal tidak valid
+        }
+
+        // Pastikan check-out lebih besar dari check-in
+        if (checkOut > checkIn) {
+            const nights = Math.max((checkOut - checkIn) / (1000 * 60 * 60 * 24), 1); // Minimal 1 malam
+
+            // Ambil harga per malam dari elemen HTML
+            let roomPrice = parseInt(document.getElementById('harga_permalam').value);
+
+            // Jika harga per malam tidak ditemukan
+            if (roomPrice === 0) {
+                document.getElementById('harga_permalam').value = "Invalid room type selected.";
+                return;
+            }
+
+            // Hitung total harga
+            const totalPrice = roomPrice * nights;
+
+            document.getElementById('totalPrice').value = totalPrice;
+            document.getElementById('priceDisplay').textContent = `Total Price: Rp ${totalPrice.toLocaleString()}`;
+        } else {
+            document.getElementById('priceDisplay').textContent = "Check-out date must be after check-in date";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Menambahkan event listener ke elemen input untuk memanggil fungsi calculatePrice
+        document.getElementById('checkIn').addEventListener('change', calculatePrice);
+        document.getElementById('checkOut').addEventListener('change', calculatePrice);
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module">
+    import { API_BASE_URL } from './../../js/config.js';
+    console.log(API_BASE_URL );
+    document.getElementById('formSubmit').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const bookingData = {
+            customerId: document.getElementById('userId').value,
+            roomId: document.getElementById('id_room').value,
+            checkIn: document.getElementById('checkIn').value,
+            checkOut: document.getElementById('checkOut').value,
+            totalAmount: document.getElementById('totalPrice').value
+        };
+    
+        let config = {
+            method: 'post',
+            url: `${API_BASE_URL}/api/bookings/new`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: bookingData
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log(JSON.stringify(response.data));
+
+                alert('Booking successful!');
+                window.location.href = `/client/pembayaran/${response.data.id}?roomId=${bookingData.roomId}`;
+            })
+            .catch((error) => {
+                console.log(error);
+                alert('There was an error while booking.');
+            });
+    });
+</script>
+</body>

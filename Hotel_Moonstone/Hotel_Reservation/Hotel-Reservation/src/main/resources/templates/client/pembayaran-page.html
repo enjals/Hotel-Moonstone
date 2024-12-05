@@ -1,0 +1,217 @@
+<script>
+    // Mengecek data pengguna di sessionStorage
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+
+    if (userData) {
+        // Jika ada data pengguna, tampilkan informasi pengguna
+        console.log("User:", userData);
+
+        if (userData.role === "ADMIN") {
+            // Jika role adalah ADMIN, arahkan ke halaman admin
+            window.location.href = "/admin/index";
+        } else if (userData.role === "CUSTOMER") {
+            // Jika role adalah CUSTOMER, lanjutkan ke halaman booking
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById("fname").value = userData.fname; // Isi First Name
+                document.getElementById("lname").value = userData.lname; // Isi Last Name
+            });
+        }
+    } else {
+        // Jika tidak ada data pengguna, arahkan ke halaman login
+        window.location.href = "/login-page";
+    }
+
+    // Ambil ID booking dari URL path
+    const urlParts = window.location.pathname.split("/");
+    const bookingId = urlParts[urlParts.length - 1]; // Mengambil elemen terakhir dari URL (123 dalam contoh)
+
+    // Ambil roomId dari query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId"); // Mengambil nilai roomId (456 dalam contoh)
+
+    // Masukkan bookingId dan roomId ke dalam elemen yang sesuai
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById("bookingId").value = bookingId; // Isi bookingId
+        document.getElementById("roomId").value = roomId; // Isi roomId
+    });
+</script>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" type="text/css" href="./../../css/facilities.css">
+    <link rel="shortcut icon" href="/img/moonstone.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .payment-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        #payment-form {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .receipt-container {
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .receipt-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .receipt-container p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- Top Text -->
+<div class="page-header-container" style="margin-top: 40px; margin-bottom: 200px">
+    <h2 class="page-header">Payment</h2>
+    <hr/>
+    <p class="page-sub-header">
+        Make your payment easy and secure with a seamless <br>
+        process and guaranteed satisfaction.
+    </p>
+</div>
+
+<!-- Payment Form -->
+<div class="payment-container">
+    <div id="payment-form">
+        <h2 class="header" style="margin-bottom: 10px">Payment Form</h2>
+        <form class="form-group" action="" id="paymentForm">
+            <label for="bookingId" class="form-label">Booking ID</label>
+            <input type="text" id="bookingId" name="bookingId" readonly />
+
+            <label for="fname" class="form-label">First Name</label>
+            <input type="text" id="fname" name="firstname" required readonly/>
+        
+            <label for="lname" class="form-label">Last Name</label>
+            <input type="text" id="lname" name="lastname" required readonly />
+
+            <label for="roomName" class="form-label">Room Name</label>
+            <input type="text" id="roomName" name="roomName" readonly required th:value="${kamar.namaKamar}" />
+
+            <label for="roomType" class="form-label">Room Type</label>
+            <input type="text" id="roomType" name="roomType" readonly required th:value="${kamar.tipeKamar}" />
+            <input type="text" id="roomId" name="roomId" hidden />
+
+            <label for="totalPrice" class="form-label">Total Price</label>
+            <input type="text" id="totalPrice" name="totalPrice" readonly required th:value="${pesanan.totalAmount}" />
+
+            <label for="paymentMethod" class="form-label">Payment Method</label>
+            <select id="paymentMethod" name="paymentMethod" required>
+                <option value="" disabled selected>-- Select Payment Method --</option>
+                <option value="DEBIT_CARD">Debit Card</option>
+            </select>
+
+            <label for="cardNumber" class="form-label">Card Number</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter card number" required />
+
+            <button type="submit" class="btn btn-primary" style="background-color: #D4AF37; color: white;">Pay Now</button>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module">
+    import { API_BASE_URL } from './../../js/config.js';
+
+    document.getElementById('paymentForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Mencegah reload halaman setelah submit
+
+        // Ambil data dari form
+        const bookingId = document.getElementById('bookingId').value;
+
+        const payData = {
+            amount : document.getElementById('totalPrice').value,
+            method : document.getElementById('paymentMethod').value,
+            cardNumber : document.getElementById('cardNumber').value
+        };
+        // Konfigurasi Axios
+        const config = {
+            method: 'post',
+            url: `${API_BASE_URL}/api/payments/${bookingId}/pay`,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded' // Karena menggunakan @RequestParam
+            },
+            data: payData
+        };
+
+        // Kirim data menggunakan Axios
+        axios.request(config)
+            .then((response) => {
+                console.log('Payment Response:', response.data);
+
+                // Tampilkan pesan berhasil
+                alert('Payment Successful!');
+                // Redirect ke halaman konfirmasi pembayaran atau lain-lain
+                window.location.href = `/client/receipt/${response.data.id}`;
+            })
+            .catch((error) => {
+                console.error('Payment Error:', error);
+
+                // Tampilkan pesan error
+                alert('There was an error processing your payment. Please try again.');
+            });
+    });
+</script>
+
+</body>
+
+</html>

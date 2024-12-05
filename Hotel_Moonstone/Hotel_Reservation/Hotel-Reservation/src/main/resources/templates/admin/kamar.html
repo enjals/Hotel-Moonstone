@@ -1,0 +1,161 @@
+<script>
+    // Mengecek data pengguna di sessionStorage
+const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+if (userData) {
+    // Jika ada data pengguna, tampilkan informasi pengguna
+    console.log('User:', userData);
+    if (userData.role === 'ADMIN') {
+        // Jika role adalah ADMIN, arahkan ke /admin/index
+    } else if (userData.role === 'CUSTOMER') {
+        // Jika role adalah CUSTOMER, arahkan ke halaman utama /
+        window.location.href = '/';
+    }
+} else {
+    // Jika tidak ada data pengguna, arahkan ke halaman login
+    window.location.href = '/login-page';
+}
+</script>
+<script type="module">
+    import { API_BASE_URL } from './../js/config.js';
+    console.log(API_BASE_URL);
+    var urls = API_BASE_URL;
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Kamar - Admin Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/img/moonstoneicon.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="'/admin'">Hotel Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin'">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/kamar'">Kelola Kamar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/pemesanan'">Pemesanan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="'/admin/customers'">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id='logoutBtn'>Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>Kelola Kamar</h2>
+        <a th:href="'/admin/tambah-kamar'" class="btn btn-primary mb-3">Tambah Kamar</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Person Capacity</th>
+                    <th>Bed Count</th>
+                    <th>Room Number</th>
+                    <th>Room Type</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Photo</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="kamar : ${kamar}">
+                    <tr>
+                        <td th:text="${kamar.namaKamar}"></td>
+                        <td th:text="${kamar.jumlahOrang}"></td>
+                        <td th:text="${kamar.jumlahKasur}"></td>
+                        <td th:text="${kamar.nomorKamar}"></td>
+                        <td th:text="${kamar.tipeKamar}"></td>
+                        <td th:text="${kamar.harga}"></td>
+                        <td th:text="${kamar.deskripsi}"></td>
+                        <td th:utext="'<a href=\'' + ${kamar.fotoKamar} + '\'>' +
+                            '<img src=\'' + ${kamar.fotoKamar} + '\' style=\'width:100px\'>' +
+                            '</a>'">
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" th:href="@{/admin/kamar-detail/{id}(id=${kamar.id})}" title="Detail">
+                                <i class="bi bi-info-circle"></i> 
+                            </a>
+                            <form id="deleteForm" th:action="@{${urls}/api/kamar/delete/{id}(id=${kamar.id})}" method="post" style="display:inline;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                    <i class="bi bi-trash"></i> 
+                                </button>
+                            </form>
+                        </td>                        
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+            import { API_BASE_URL } from './../js/config.js';
+            console.log(API_BASE_URL);
+
+        // Mendapatkan semua tombol delete
+        const deleteButtons = document.querySelectorAll('form[id="deleteForm"]');
+    
+        deleteButtons.forEach(button => {
+            button.addEventListener('submit', function(event) {
+                event.preventDefault(); // Mencegah form submit biasa
+    
+                const form = event.target;
+    
+                if (confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
+                    // Menggunakan API yang ada di backend (misalnya http://localhost:8080)
+                    const url = `${API_BASE_URL}/api/kamar/delete/${form.getAttribute('action').split('/').pop()}`;
+    
+                    // Mengirimkan request DELETE menggunakan fetch API
+                    fetch(url, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Kamar berhasil dihapus!');
+                            window.location.reload(); // Reload halaman setelah penghapusan
+                        } else {
+                            alert('Terjadi kesalahan saat menghapus kamar.');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Terjadi kesalahan: ' + error.message);
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        // Menangani klik tombol logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Menghapus data pengguna dari sessionStorage
+            sessionStorage.removeItem('userData');
+            
+            // Redirect ke halaman login setelah data dihapus
+            window.location.href = '/login-page';  // Pastikan URL login sesuai
+        });
+    </script>
+</body>
+</html>
